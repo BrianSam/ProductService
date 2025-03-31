@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateProductReqResDto {
-    private Long id;
+
     private String title;
     private String description;
     private Double price;
@@ -20,14 +20,13 @@ public class CreateProductReqResDto {
 
     public static Product ToProduct(CreateProductReqResDto dto) {
         Product product = new Product();
-        product.setTitle(dto.getTitle());
-        product.setDescription(dto.getDescription());
+        if (dto.getTitle() != null) {product.setTitle(dto.getTitle());}
+        if (dto.getDescription() != null) {product.setDescription(dto.getDescription());}
         product.setPrice(dto.getPrice());
         product.setImageUrl(dto.getImageUrl());
         Category category = new Category();
         category.setName(dto.getCategoryName());
         product.setCategory(category);
-        product.setId(dto.getId());
 
         return product;
     }

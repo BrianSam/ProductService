@@ -5,7 +5,9 @@ import com.brian.productservice.models.Product;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-@Primary
+
+import java.util.List;
+
 @Service
 public class ProductServiceFakeStoreImpl implements ProductService {
 
@@ -26,5 +28,30 @@ public class ProductServiceFakeStoreImpl implements ProductService {
 
         return response;
 
+    }
+
+    @Override
+    public List<FakeStoreReqResDTO> getAllProducts() {
+        return List.of();
+    }
+
+    @Override
+    public FakeStoreReqResDTO getProductById(Long id) {
+        return null;
+    }
+
+    @Override
+    public FakeStoreReqResDTO getProductByName(String name) {
+        return null;
+    }
+
+    @Override
+    public FakeStoreReqResDTO updateProductById(Long id, Product product) {
+        return null;
+    }
+
+    @Override
+    public String deleteProductById(Long id) {
+        return null;
     }
 }

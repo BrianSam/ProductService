@@ -11,7 +11,6 @@ public class FakeStoreReqResDTO {
 
 
 
-    private Long id;
     private String title;
     private String description;
     private Double price;
@@ -23,7 +22,6 @@ public class FakeStoreReqResDTO {
 
     public static FakeStoreReqResDTO fromProductToFakeStoreReqResDTO(Product product) {
         FakeStoreReqResDTO fakeStoreReqResDTO = new FakeStoreReqResDTO();
-        fakeStoreReqResDTO.setId(product.getId());
         fakeStoreReqResDTO.setTitle(product.getTitle());
         fakeStoreReqResDTO.setDescription(product.getDescription());
         fakeStoreReqResDTO.setPrice(product.getPrice());
