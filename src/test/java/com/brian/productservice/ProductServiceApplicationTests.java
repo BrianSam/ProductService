@@ -10,4 +10,9 @@ class ProductServiceApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    public void test() {
+
+    }
+
 }
