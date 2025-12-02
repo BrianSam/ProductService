@@ -4,21 +4,50 @@ import com.brian.productservice.dtos.fakestore.FakeStoreReqResDTO;
 import com.brian.productservice.dtos.product.CreateProductReqResDto;
 import com.brian.productservice.models.Product;
 import com.brian.productservice.services.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController()
 @RequestMapping("/products")
 public class ProductController {
 
+
+    private RedisTemplate<String,Object> template;
+    @Autowired
+    private ObjectMapper objectMapper;
+
     private ProductService productService;
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService,RedisTemplate<String,Object> template) {
+        this.template = template;
         this.productService = productService;
     }
     @GetMapping
-    public List<FakeStoreReqResDTO> getProducts() {
+    public List<FakeStoreReqResDTO> getProducts() throws JsonProcessingException {
+
+        String json = null;
+        List<FakeStoreReqResDTO> ifHashed = null;
+        if (template.opsForHash().get("products","get_hash") != null) {
+            json = (String) template.opsForHash().get("products","get_hash");
+            ifHashed =   objectMapper.readValue(json, new TypeReference<List<FakeStoreReqResDTO>>() {
+            });
+        }
+
+        if(ifHashed != null) {
+            return ifHashed;
+        }
+
         List<FakeStoreReqResDTO> reqResDTO = productService.getAllProducts();
+        String outputJson = objectMapper.writeValueAsString(reqResDTO);
+        template.opsForHash().put("products","get_hash", outputJson);
+        template.expire("products", Duration.ofMinutes(10));
+
         return reqResDTO;
     }
     @GetMapping("/id/{id}")
